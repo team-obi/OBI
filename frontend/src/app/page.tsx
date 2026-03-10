@@ -83,8 +83,10 @@ export default function Home() {
       };
 
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
-        const recordedFile = new File([audioBlob], "recording.wav", { type: "audio/wav" });
+        const mimeType = mediaRecorder.mimeType || "audio/webm";
+        const extension = mimeType.includes("ogg") ? "ogg" : mimeType.includes("mp4") ? "m4a" : "webm";
+        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+        const recordedFile = new File([audioBlob], `recording.${extension}`, { type: mimeType });
         setFile(recordedFile);
         stream.getTracks().forEach((track) => track.stop());
       };
